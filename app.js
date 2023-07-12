@@ -11,7 +11,7 @@ app.use("/api/tiktaktoe", GamesRouter);
 
 // for testing
 app.use((req, res, next) => {
-	res.send("Hello Tik Tak Toe World!");
+	res.send("No such route!");
 });
 
 app.listen(PORT, async () => {
