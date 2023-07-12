@@ -19,5 +19,8 @@
 	"homepage": "https://github.com/ryan20bv/tiktaktoe_be#readme",
 	"dependencies": {
 		"express": "^4.18.2"
+	},
+	"devDependencies": {
+		"nodemon": "^3.0.1"
 	}
 }
