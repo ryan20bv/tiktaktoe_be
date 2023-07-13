@@ -3,10 +3,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const historiesSchema = new Schema({
+	game_id: {
+		type: Schema.Types.ObjectId,
+		ref: "Game",
+	},
 	gameHistory: [
 		[
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "1-1",
 				},
@@ -20,7 +24,7 @@ const historiesSchema = new Schema({
 				},
 			},
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "1-2",
 				},
@@ -34,7 +38,7 @@ const historiesSchema = new Schema({
 				},
 			},
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "1-3",
 				},
@@ -50,7 +54,7 @@ const historiesSchema = new Schema({
 		],
 		[
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "2-1",
 				},
@@ -64,7 +68,7 @@ const historiesSchema = new Schema({
 				},
 			},
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "2-2",
 				},
@@ -78,7 +82,7 @@ const historiesSchema = new Schema({
 				},
 			},
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "2-3",
 				},
@@ -94,7 +98,7 @@ const historiesSchema = new Schema({
 		],
 		[
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "3-1",
 				},
@@ -108,7 +112,7 @@ const historiesSchema = new Schema({
 				},
 			},
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "3-2",
 				},
@@ -122,7 +126,7 @@ const historiesSchema = new Schema({
 				},
 			},
 			{
-				id: {
+				tile_id: {
 					type: String,
 					default: "3-3",
 				},
