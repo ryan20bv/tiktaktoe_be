@@ -114,7 +114,7 @@ const allSavedGames = async (req, res, next) => {
 
 const getGameByGameId = async (req, res, next) => {
 	const game_Id = req.params.game_Id;
-	console.log(game_Id);
+
 	let foundGame;
 
 	try {
