@@ -1,14 +1,7 @@
 const express = require("express");
 const GameRouter = express.Router();
 const gameController = require("../controllers/game-controllers");
-
-/* 
-	* @desc        		GET test route
-	! @serverRoute    get "/api/tiktaktoe"
-  	!	@additionalRoute "/"
-	? @access      		public
-*/
-GameRouter.get("/", gameController.testRoute);
+const { check } = require("express-validator");
 
 /* 
 	* @desc        		POST start new game
@@ -16,6 +9,27 @@ GameRouter.get("/", gameController.testRoute);
   	!	@additionalRoute "/new"
 	? @access      		public
 */
-GameRouter.post("/new", gameController.startNewGame);
+GameRouter.post(
+	"/new",
+	[check("player1_Name").not().isEmpty(), check("player2_Name").not().isEmpty()],
+	gameController.startNewGame
+);
+
+/* 
+	* @desc        		GET get all saved games
+	! @serverRoute    get "/api/tiktaktoe"
+  	!	@additionalRoute "/allGames"
+	? @access      		public
+*/
+
+GameRouter.get("/allGames", gameController.allSavedGames);
+
+/* 
+	* @desc        		GET get saved game by game id
+	! @serverRoute    get "/api/tiktaktoe"
+  	!	@additionalRoute "/game/:game_Id"
+	? @access      		public
+*/
+GameRouter.get("/game/:game_Id", gameController.getGameByGameId);
 
 module.exports = GameRouter;
