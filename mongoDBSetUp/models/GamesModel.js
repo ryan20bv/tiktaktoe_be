@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const gamesSchema = new Schema({
+	password: {
+		type: String,
+		default: "123456",
+	},
 	playerTurn: {
 		type: String,
 		default: 1,
