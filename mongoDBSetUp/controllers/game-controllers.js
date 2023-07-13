@@ -17,7 +17,7 @@ const startNewGame = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		// return res.status(400).json({ errors: errors.array() });
-		return next(new HttpError("Please enter name and password", 422));
+		return next(new HttpError("Please Enter Players name", 422));
 	}
 
 	let newGame = new GamesModel({
@@ -68,7 +68,7 @@ const startNewGame = async (req, res, next) => {
 		],
 	});
 
-	newGame.gameHistory = newGameHistory._id;
+	newGame.history = newGameHistory._id;
 
 	try {
 		const sess = await mongoose.startSession();
@@ -81,8 +81,9 @@ const startNewGame = async (req, res, next) => {
 		const error = new HttpError("Cant create new Game, please try again", 422);
 		return next(error);
 	}
+	const populatedGame = await newGame.populate({ path: "history" });
 
-	res.status(201).json({ message: "New Game Created" });
+	res.status(201).json({ newGame: populatedGame, message: "New Game Created" });
 };
 
 /* 
@@ -96,13 +97,14 @@ const allSavedGames = async (req, res, next) => {
 	let allSavedGames;
 
 	try {
-		allSavedGames = await GamesModel.find().populate({ path: "gameHistory" });
+		allSavedGames = await GamesModel.find().populate({ path: "history" });
 	} catch (err) {
 		const error = new HttpError("get allSavedGames network error", 500);
 		return next(error);
 	}
 
-	res.status(201).json({ allSavedGames });
+	res.status(200).json({ allSavedGames });
+	// res.status(200).json({ message: "allSavedGames" });
 };
 
 /* 
@@ -119,7 +121,7 @@ const getGameByGameId = async (req, res, next) => {
 
 	try {
 		foundGame = await GamesModel.findById(game_Id).populate({
-			path: "gameHistory",
+			path: "history",
 		});
 	} catch (err) {
 		const error = new HttpError("get getGameByGameId network error", 500);

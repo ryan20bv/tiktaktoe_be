@@ -31,11 +31,15 @@ const gamesSchema = new Schema({
 			default: 0,
 		},
 	},
-	gameHistory: {
+	draw: {
+		type: Number,
+		default: 0,
+	},
+
+	history: {
 		type: Schema.Types.ObjectId,
 		ref: "History",
 	},
-
 	__v: {
 		type: Number,
 		select: false, // Exclude __v from query results
