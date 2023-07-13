@@ -14,6 +14,10 @@ app.use(express.json());
 const GamesRouter = require("./mongoDBSetUp/routes/game-routes");
 app.use("/api/tiktaktoe", GamesRouter);
 
+app.use((req, res, next) => {
+	res.send("Hello TIK TAK TOE!");
+});
+
 // if no route is Found
 app.use((req, res, next) => {
 	const error = new HttpError("Route not found", 404);
