@@ -6,8 +6,8 @@ const mongoose = require("mongoose");
 
 /* 
 	* @desc        		PATCH update game history by id
-	! @serverRoute    PATCH "/api/tiktaktoe"
-  	!	@additionalRoute "/history/update/:game_Id"
+	! @serverRoute    PATCH "/api/tiktaktoe/history"
+  	!	@additionalRoute "/update/:game_Id"
 	? @access      		public
 */
 
@@ -54,7 +54,7 @@ const updateGameHistory = async (req, res, next) => {
 		const error = new HttpError("not same game id", 500);
 		return next(error);
 	}
-	console.log(updatedGame);
+
 	foundSavedGame.draw = updatedGame.draw;
 	foundSavedGame.player1 = { ...updatedGame.player1 };
 	foundSavedGame.player2 = { ...updatedGame.player2 };
@@ -77,4 +77,19 @@ const updateGameHistory = async (req, res, next) => {
 	// res.status(201).json({ message: "updating!" });
 };
 
+/* 
+	* @desc        		PATCH reset gameHistory and make new one
+	! @serverRoute    PATCH "/api/tiktaktoe/history"
+  	!	@additionalRoute "/reset/:game_Id"
+	? @access      		public
+*/
+
+const resetGameHistory = async (req, res, next) => {
+	const { updatedGame } = req.body;
+	const game_Id = req.params.game_Id;
+	console.log(game_Id);
+	console.log(updatedGame);
+};
+
 exports.updateGameHistory = updateGameHistory;
+exports.resetGameHistory = resetGameHistory;
