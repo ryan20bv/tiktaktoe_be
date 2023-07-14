@@ -11,7 +11,7 @@ const { check } = require("express-validator");
 
 HistoryRouter.patch(
 	"/history/update/:game_Id",
-	[check("newHistory").not().isEmpty()],
+	[check("updatedGame").not().isEmpty()],
 	historyController.updateGameHistory
 );
 
