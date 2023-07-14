@@ -54,11 +54,12 @@ const updateGameHistory = async (req, res, next) => {
 		const error = new HttpError("not same game id", 500);
 		return next(error);
 	}
+	console.log(updatedGame);
 	foundSavedGame.draw = updatedGame.draw;
 	foundSavedGame.player1 = { ...updatedGame.player1 };
 	foundSavedGame.player2 = { ...updatedGame.player2 };
 	foundSavedGame.playerTurn = updatedGame.playerTurn;
-
+	foundSavedGame.gameIsDone = updatedGame.gameIsDone;
 	foundHistory.gameHistory = updatedGame.history.gameHistory;
 	try {
 		const sess = await mongoose.startSession();
