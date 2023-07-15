@@ -35,7 +35,10 @@ const gamesSchema = new Schema({
 		type: Number,
 		default: 0,
 	},
-
+	gameIsDone: {
+		type: Boolean,
+		default: false,
+	},
 	history: {
 		type: Schema.Types.ObjectId,
 		ref: "History",
