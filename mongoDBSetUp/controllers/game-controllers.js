@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 /* 
 	* @desc        		POST start new game
-	! @serverRoute    POST "/api/tiktaktoe"
+	! @serverRoute    get "/api/tiktaktoe/game"
   	!	@additionalRoute "/new"
 	? @access      		public
 */
@@ -88,7 +88,7 @@ const startNewGame = async (req, res, next) => {
 
 /* 
 	* @desc        		GET get all saved games
-	! @serverRoute    get "/api/tiktaktoe"
+	! @serverRoute    get "/api/tiktaktoe/game"
   	!	@additionalRoute "/allGames"
 	? @access      		public
 */
@@ -109,8 +109,8 @@ const allSavedGames = async (req, res, next) => {
 
 /* 
 	* @desc        		GET get saved game by game id
-	! @serverRoute    get "/api/tiktaktoe"
-  	!	@additionalRoute "/game/:game_Id"
+	! @serverRoute    get "/api/tiktaktoe/game"
+  	!	@additionalRoute "/:game_Id"
 	? @access      		public
 */
 
