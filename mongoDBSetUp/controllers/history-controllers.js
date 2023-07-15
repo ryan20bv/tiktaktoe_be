@@ -170,7 +170,7 @@ const resetGameHistory = async (req, res, next) => {
 	foundSavedGame.draw = updatedGame.draw;
 	foundSavedGame.player1 = { ...updatedGame.player1 };
 	foundSavedGame.player2 = { ...updatedGame.player2 };
-	foundSavedGame.playerTurn = updatedGame.playerTurn;
+	foundSavedGame.playerTurn = "1";
 	foundSavedGame.gameIsDone = false;
 	foundSavedGame.history = newGameHistory._id;
 	// console.log(foundSavedGame);
