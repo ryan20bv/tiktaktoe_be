@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const gamesSchema = new Schema({
 	password: {
 		type: String,
-		default: "123456",
+		required: true,
 	},
 	playerTurn: {
 		type: String,

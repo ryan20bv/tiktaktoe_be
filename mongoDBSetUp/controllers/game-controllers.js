@@ -3,6 +3,8 @@ const HttpError = require("../errorHandler/http-error");
 const GamesModel = require("../models/GamesModel");
 const HistoriesModel = require("../models/HistoriesModel");
 const mongoose = require("mongoose");
+// for authentication
+const bcrypt = require("bcrypt");
 
 /* 
 	* @desc        		POST start new game
@@ -12,12 +14,22 @@ const mongoose = require("mongoose");
 */
 
 const startNewGame = async (req, res, next) => {
-	const { player1_Name, player2_Name } = req.body;
+	const { player1_Name, player2_Name, password } = req.body;
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
+		// console.log(errors);
 		// return res.status(400).json({ errors: errors.array() });
-		return next(new HttpError("Please Enter Players name", 422));
+		return next(new HttpError("Please Enter Players name and Password", 422));
+	}
+
+	const salt = bcrypt.genSaltSync(12);
+	let hashPassword;
+	try {
+		hashPassword = await bcrypt.hashSync(password, salt);
+	} catch (err) {
+		const error = new HttpError("Could not create user, please try again!", 500);
+		return next(error);
 	}
 
 	let newGame = new GamesModel({
@@ -27,6 +39,7 @@ const startNewGame = async (req, res, next) => {
 		player2: {
 			name: player2_Name,
 		},
+		password: hashPassword,
 	});
 
 	let newGameHistory = new HistoriesModel({
@@ -97,7 +110,9 @@ const allSavedGames = async (req, res, next) => {
 	let allSavedGames;
 
 	try {
-		allSavedGames = await GamesModel.find().populate({ path: "history" });
+		allSavedGames = await GamesModel.find()
+			.select("-password")
+			.populate({ path: "history" });
 	} catch (err) {
 		const error = new HttpError("get allSavedGames network error", 500);
 		return next(error);
