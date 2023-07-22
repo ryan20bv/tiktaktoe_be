@@ -14,7 +14,11 @@ GameRouter.post(
 	[
 		check("player1_Name").not().isEmpty(),
 		check("player2_Name").not().isEmpty(),
+<<<<<<< HEAD
 		check("password").isLength({ min: 4 }),
+=======
+		check("password").not().isEmpty(),
+>>>>>>> origin/dev
 	],
 	gameController.startNewGame
 );
