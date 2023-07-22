@@ -3,14 +3,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const gamesSchema = new Schema({
-	password: {
-		type: String,
-		default: "123456",
-	},
-	playerTurn: {
-		type: String,
-		default: 1,
-	},
 	player1: {
 		name: {
 			type: String,
@@ -35,9 +27,22 @@ const gamesSchema = new Schema({
 		type: Number,
 		default: 0,
 	},
+	playerTurn: {
+		type: String,
+		default: 1,
+	},
+	password: {
+		type: String,
+		required: true,
+	},
+
 	gameIsDone: {
 		type: Boolean,
 		default: false,
+	},
+	gameMessage: {
+		type: String,
+		default: "",
 	},
 	history: {
 		type: Schema.Types.ObjectId,
