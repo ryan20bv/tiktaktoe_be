@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 */
 
 const startNewGame = async (req, res, next) => {
-	const { player1_Name, player2_Name } = req.body;
+	const { player1_Name, player2_Name, password } = req.body;
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -27,6 +27,7 @@ const startNewGame = async (req, res, next) => {
 		player2: {
 			name: player2_Name,
 		},
+		password,
 	});
 
 	let newGameHistory = new HistoriesModel({

@@ -60,7 +60,9 @@ const updateGameHistory = async (req, res, next) => {
 	foundSavedGame.player2 = { ...updatedGame.player2 };
 	foundSavedGame.playerTurn = updatedGame.playerTurn;
 	foundSavedGame.gameIsDone = updatedGame.gameIsDone;
+	foundSavedGame.gameMessage = updatedGame.gameMessage;
 	foundHistory.gameHistory = updatedGame.history.gameHistory;
+
 	try {
 		const sess = await mongoose.startSession();
 		sess.startTransaction();
@@ -173,6 +175,8 @@ const resetGameHistory = async (req, res, next) => {
 	foundSavedGame.playerTurn = "1";
 	foundSavedGame.gameIsDone = false;
 	foundSavedGame.history = newGameHistory._id;
+	foundSavedGame.gameMessage = "";
+
 	// console.log(foundSavedGame);
 
 	try {

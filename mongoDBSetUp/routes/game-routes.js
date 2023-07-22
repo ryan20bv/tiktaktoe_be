@@ -11,7 +11,11 @@ const { check } = require("express-validator");
 */
 GameRouter.post(
 	"/new",
-	[check("player1_Name").not().isEmpty(), check("player2_Name").not().isEmpty()],
+	[
+		check("player1_Name").not().isEmpty(),
+		check("player2_Name").not().isEmpty(),
+		check("password").not().isEmpty(),
+	],
 	gameController.startNewGame
 );
 
