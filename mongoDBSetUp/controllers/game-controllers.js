@@ -16,7 +16,7 @@ const jwt = require("jsonwebtoken");
 
 const accessGame = async (req, res, next) => {
 	const { game_id, password } = req.body;
-
+	// console.log(req.body);
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		// console.log(errors);
@@ -58,6 +58,7 @@ const accessGame = async (req, res, next) => {
 	}
 
 	res.status(201).json({ token });
+	// res.status(201).json({ message: "accessGame" });
 };
 
 /* 
