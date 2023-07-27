@@ -47,7 +47,7 @@ const accessGame = async (req, res, next) => {
 	}
 
 	const payload = {
-		foundGame,
+		game_id: foundGame._id,
 	};
 
 	try {
@@ -63,7 +63,7 @@ const accessGame = async (req, res, next) => {
 
 /* 
 	* @desc        		POST start new game
-	! @serverRoute    get "/api/tiktaktoe/game"
+	! @serverRoute    POST "/api/tiktaktoe/game"
   	!	@additionalRoute "/new"
 	? @access      		public
 */
@@ -151,7 +151,20 @@ const startNewGame = async (req, res, next) => {
 	}
 	const populatedGame = await newGame.populate({ path: "history" });
 
-	res.status(201).json({ newGame: populatedGame, message: "New Game Created" });
+	const payload = {
+		newGame: populatedGame,
+	};
+
+	try {
+		token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+	} catch (err) {
+		const error = new HttpError("cant make token!", 500);
+		return next(error);
+	}
+
+	res
+		.status(201)
+		.json({ newGame: populatedGame, message: "New Game Created", token });
 };
 
 /* 

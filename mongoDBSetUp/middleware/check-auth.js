@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const HttpError = require("../models/http-error");
+const HttpError = require("../errorHandler/http-error");
 
 module.exports = (req, res, next) => {
 	if (req.method === "OPTIONS") {
@@ -12,8 +12,7 @@ module.exports = (req, res, next) => {
 			throw new Error("Authentication failed!");
 		}
 		const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-		console.log(decodedToken);
-		// req.userData = { userId: decodedToken.user.id };
+		req.gameData = { game_id: decodedToken.game_id };
 		next();
 	} catch (err) {
 		const error = new HttpError("Authentication failed!", 403);
