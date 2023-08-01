@@ -3,10 +3,67 @@ const HttpError = require("../errorHandler/http-error");
 const GamesModel = require("../models/GamesModel");
 const HistoriesModel = require("../models/HistoriesModel");
 const mongoose = require("mongoose");
+// for authentication
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+/* 
+	* @desc        		POST game access by password
+	! @serverRoute    POST "/api/tiktaktoe/game"
+  !	@additionalRoute "/access"
+	? @access      		public
+*/
+
+const accessGame = async (req, res, next) => {
+	const { game_id, password } = req.body;
+	// console.log(req.body);
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		// console.log(errors);
+		// return res.status(400).json({ errors: errors.array() });
+		return next(new HttpError("Please Password min 4 character", 422));
+	}
+
+	let foundGame;
+	try {
+		foundGame = await GamesModel.findById(game_id);
+	} catch (err) {
+		const error = new HttpError("accessGame network error", 500);
+		return next(error);
+	}
+	if (!foundGame) {
+		const error = new HttpError("No game found by game id", 500);
+		return next(error);
+	}
+	let isPasswordValid = false;
+	try {
+		isPasswordValid = await bcrypt.compare(password, foundGame.password);
+	} catch (err) {
+		const error = new HttpError("Could not log you in, please try again!", 500);
+		return next(error);
+	}
+	if (!isPasswordValid) {
+		return next(new HttpError("Password is incorrect!", 403));
+	}
+
+	const payload = {
+		game_id: foundGame._id,
+	};
+
+	try {
+		token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+	} catch (err) {
+		const error = new HttpError("cant make token!", 500);
+		return next(error);
+	}
+
+	res.status(201).json({ token });
+	// res.status(201).json({ message: "accessGame" });
+};
 
 /* 
 	* @desc        		POST start new game
-	! @serverRoute    get "/api/tiktaktoe/game"
+	! @serverRoute    POST "/api/tiktaktoe/game"
   	!	@additionalRoute "/new"
 	? @access      		public
 */
@@ -16,8 +73,18 @@ const startNewGame = async (req, res, next) => {
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
+		// console.log(errors);
 		// return res.status(400).json({ errors: errors.array() });
-		return next(new HttpError("Please Enter Players name", 422));
+		return next(new HttpError("Please Enter Players name and Password", 422));
+	}
+
+	const salt = bcrypt.genSaltSync(12);
+	let hashPassword;
+	try {
+		hashPassword = await bcrypt.hashSync(password, salt);
+	} catch (err) {
+		const error = new HttpError("Could not create user, please try again!", 500);
+		return next(error);
 	}
 
 	let newGame = new GamesModel({
@@ -27,7 +94,7 @@ const startNewGame = async (req, res, next) => {
 		player2: {
 			name: player2_Name,
 		},
-		password,
+		password: hashPassword,
 	});
 
 	let newGameHistory = new HistoriesModel({
@@ -84,7 +151,20 @@ const startNewGame = async (req, res, next) => {
 	}
 	const populatedGame = await newGame.populate({ path: "history" });
 
-	res.status(201).json({ newGame: populatedGame, message: "New Game Created" });
+	const payload = {
+		newGame: populatedGame,
+	};
+
+	try {
+		token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+	} catch (err) {
+		const error = new HttpError("cant make token!", 500);
+		return next(error);
+	}
+
+	res
+		.status(201)
+		.json({ newGame: populatedGame, message: "New Game Created", token });
 };
 
 /* 
@@ -98,7 +178,9 @@ const allSavedGames = async (req, res, next) => {
 	let allSavedGames;
 
 	try {
-		allSavedGames = await GamesModel.find().populate({ path: "history" });
+		allSavedGames = await GamesModel.find()
+			.select("-password")
+			.populate({ path: "history" });
 	} catch (err) {
 		const error = new HttpError("get allSavedGames network error", 500);
 		return next(error);
@@ -137,6 +219,7 @@ const getGameByGameId = async (req, res, next) => {
 	res.status(201).json({ foundGame });
 };
 
+exports.accessGame = accessGame;
 exports.startNewGame = startNewGame;
 exports.allSavedGames = allSavedGames;
 exports.getGameByGameId = getGameByGameId;

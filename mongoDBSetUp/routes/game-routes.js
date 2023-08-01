@@ -4,6 +4,19 @@ const gameController = require("../controllers/game-controllers");
 const { check } = require("express-validator");
 
 /* 
+	* @desc        		POST game access by password
+	! @serverRoute    POST "/api/tiktaktoe/game"
+  !	@additionalRoute "/access"
+	? @access      		public
+*/
+
+GameRouter.post(
+	"/access",
+	[check("game_id").not().isEmpty(), check("password").isLength({ min: 4 })],
+	gameController.accessGame
+);
+
+/* 
 	* @desc        		POST start new game
 	! @serverRoute    get "/api/tiktaktoe/game"
   	!	@additionalRoute "/new"
@@ -14,7 +27,7 @@ GameRouter.post(
 	[
 		check("player1_Name").not().isEmpty(),
 		check("player2_Name").not().isEmpty(),
-		check("password").not().isEmpty(),
+		check("password").isLength({ min: 4 }),
 	],
 	gameController.startNewGame
 );
