@@ -176,10 +176,11 @@ const startNewGame = async (req, res, next) => {
 
 const allSavedGames = async (req, res, next) => {
 	let allSavedGames;
-
+	const sortQuery = { createdAt: -1 };
 	try {
 		allSavedGames = await GamesModel.find()
-			.select("-password")
+			.sort(sortQuery)
+			.select("-password -updatedAt")
 			.populate({ path: "history" });
 	} catch (err) {
 		const error = new HttpError("get allSavedGames network error", 500);
