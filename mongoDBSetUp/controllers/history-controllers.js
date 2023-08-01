@@ -8,12 +8,13 @@ const mongoose = require("mongoose");
 	* @desc        		PATCH update game history by id
 	! @serverRoute    PATCH "/api/tiktaktoe/history"
   	!	@additionalRoute "/update/:game_Id"
-	? @access      		public
+	? @access      		private
 */
 
 const updateGameHistory = async (req, res, next) => {
 	const { updatedGame } = req.body;
 	const game_Id = req.params.game_Id;
+	// console.log(req.gameData);
 	// console.log(updatedGame);
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -83,7 +84,7 @@ const updateGameHistory = async (req, res, next) => {
 	* @desc        		PATCH reset gameHistory and make new one
 	! @serverRoute    PATCH "/api/tiktaktoe/history"
   	!	@additionalRoute "/reset/:game_Id"
-	? @access      		public
+	? @access      		private
 */
 
 const resetGameHistory = async (req, res, next) => {
