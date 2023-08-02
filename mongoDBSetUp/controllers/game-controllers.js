@@ -16,11 +16,8 @@ const jwt = require("jsonwebtoken");
 
 const accessGame = async (req, res, next) => {
 	const { game_id, password } = req.body;
-	// console.log(req.body);
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		// console.log(errors);
-		// return res.status(400).json({ errors: errors.array() });
 		return next(new HttpError("Please Password min 4 character", 422));
 	}
 
@@ -188,7 +185,6 @@ const allSavedGames = async (req, res, next) => {
 	}
 
 	res.status(200).json({ allSavedGames });
-	// res.status(200).json({ message: "allSavedGames" });
 };
 
 /* 
@@ -200,7 +196,6 @@ const allSavedGames = async (req, res, next) => {
 
 const getGameByGameId = async (req, res, next) => {
 	const game_Id = req.params.game_Id;
-
 	let foundGame;
 
 	try {
@@ -220,7 +215,50 @@ const getGameByGameId = async (req, res, next) => {
 	res.status(201).json({ foundGame });
 };
 
+/* 
+	* @desc        		DELETE  saved game by game id
+	! @serverRoute    delete "/api/tiktaktoe/game"
+  	!	@additionalRoute "/:game_id"
+	? @access      		private need password to delete
+*/
+
+const deleteGameById = async (req, res, next) => {
+	const { password } = req.body;
+
+	const game_id = req.params.game_id;
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return next(new HttpError("Please Enter Password", 422));
+	}
+
+	let foundGame;
+	try {
+		foundGame = await GamesModel.findById(game_id);
+	} catch (err) {
+		const error = new HttpError("accessGame network error", 500);
+		return next(error);
+	}
+	if (!foundGame) {
+		const error = new HttpError("No game found by game id", 500);
+		return next(error);
+	}
+	let isPasswordValid = false;
+	try {
+		isPasswordValid = await bcrypt.compare(password, foundGame.password);
+	} catch (err) {
+		const error = new HttpError("Could not log you in, please try again!", 500);
+		return next(error);
+	}
+	if (!isPasswordValid) {
+		return next(new HttpError("Password is incorrect!", 403));
+	}
+	await foundGame.deleteOne();
+
+	res.status(201).json({ message: "Delete Game" });
+};
+
 exports.accessGame = accessGame;
 exports.startNewGame = startNewGame;
 exports.allSavedGames = allSavedGames;
 exports.getGameByGameId = getGameByGameId;
+exports.deleteGameById = deleteGameById;
