@@ -235,7 +235,7 @@ const deleteGameById = async (req, res, next) => {
 	try {
 		foundGame = await GamesModel.findById(game_id);
 	} catch (err) {
-		const error = new HttpError("accessGame network error", 500);
+		const error = new HttpError("deleteGameById network error", 500);
 		return next(error);
 	}
 	if (!foundGame) {
@@ -252,7 +252,27 @@ const deleteGameById = async (req, res, next) => {
 	if (!isPasswordValid) {
 		return next(new HttpError("Password is incorrect!", 403));
 	}
-	await foundGame.deleteOne();
+
+	let foundHistory;
+	try {
+		foundHistory = await HistoriesModel.findById(foundGame.history);
+	} catch (err) {
+		const error = new HttpError("deleteGameById network error", 500);
+		return next(error);
+	}
+
+	// forgot to delete the history related to the found game
+	try {
+		const sess = await mongoose.startSession();
+		sess.startTransaction();
+		await foundGame.deleteOne();
+		await foundHistory.deleteOne({ session: sess });
+		await sess.commitTransaction();
+	} catch (err) {
+		console.log(err);
+		const error = new HttpError("Cant create new Game, please try again", 422);
+		return next(error);
+	}
 
 	res.status(201).json({ message: "Delete Game" });
 };
