@@ -6,7 +6,7 @@ const cors = require("cors");
 const HttpError = require("./mongoDBSetUp/errorHandler/http-error");
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "https://tik-tak-toe-theta.vercel.app/" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
