@@ -49,4 +49,17 @@ GameRouter.get("/allGames", gameController.allSavedGames);
 */
 GameRouter.get("/:game_Id", gameController.getGameByGameId);
 
+/* 
+	* @desc        		DELETE  saved game by game id
+	! @serverRoute    delete "/api/tiktaktoe/game"
+  	!	@additionalRoute "/:game_id"
+	? @access      		private need password to delete
+*/
+
+GameRouter.delete(
+	"/:game_id",
+	[check("password").isLength({ min: 4 })],
+	gameController.deleteGameById
+);
+
 module.exports = GameRouter;
