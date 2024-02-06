@@ -7,6 +7,10 @@ const accountsSchema = new Schema(
 		total_account: {
 			type: Number,
 			default: 0
+		},
+		__v: {
+			type: Number,
+			select: false // Exclude __v from query results
 		}
 	},
 	{
