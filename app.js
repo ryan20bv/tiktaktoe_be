@@ -10,10 +10,6 @@ app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-// account router
-const AccountRouter = require('./mongoDBSetUp/routes/account-routes');
-app.use('/api/tiktaktoe/account', AccountRouter);
-
 // game router
 const GamesRouter = require('./mongoDBSetUp/routes/game-routes');
 

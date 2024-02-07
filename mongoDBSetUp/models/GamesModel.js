@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const gamesSchema = new Schema(
 	{
-		player_1: {
+		player1: {
 			name: {
 				type: String,
 				required: true
@@ -14,7 +14,7 @@ const gamesSchema = new Schema(
 				default: 0
 			}
 		},
-		player_2: {
+		player2: {
 			name: {
 				type: String,
 				required: true
@@ -28,7 +28,7 @@ const gamesSchema = new Schema(
 			type: Number,
 			default: 0
 		},
-		player_turn: {
+		playerTurn: {
 			type: String,
 			default: 1
 		},
@@ -37,11 +37,11 @@ const gamesSchema = new Schema(
 			required: true
 		},
 
-		game_is_done: {
+		gameIsDone: {
 			type: Boolean,
 			default: false
 		},
-		game_message: {
+		gameMessage: {
 			type: String,
 			default: ''
 		},
@@ -54,12 +54,7 @@ const gamesSchema = new Schema(
 			select: false // Exclude __v from query results
 		}
 	},
-	{
-		timestamps: {
-			createdAt: 'created_at',
-			updatedAt: 'updated_at'
-		}
-	}
+	{timestamps: true}
 );
 
 module.exports = mongoose.model('Game', gamesSchema);

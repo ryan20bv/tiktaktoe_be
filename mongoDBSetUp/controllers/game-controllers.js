@@ -1,6 +1,6 @@
 const {validationResult} = require('express-validator');
 const HttpError = require('../errorHandler/http-error');
-const GamesModel = require('../models/GamesModel').default;
+const GamesModel = require('../models/GamesModel');
 const HistoriesModel = require('../models/HistoriesModel');
 const mongoose = require('mongoose');
 // for authentication
@@ -173,8 +173,10 @@ const startNewGame = async (req, res, next) => {
 
 const allSavedGames = async (req, res, next) => {
 	let allSavedGames;
+	let totalSavedGames;
 	const sortQuery = {createdAt: -1};
 	try {
+		totalSavedGames = await GamesModel.countDocuments();
 		allSavedGames = await GamesModel.find()
 			.sort(sortQuery)
 			.select('-password -updatedAt')
@@ -184,7 +186,7 @@ const allSavedGames = async (req, res, next) => {
 		return next(error);
 	}
 
-	res.status(200).json({allSavedGames});
+	res.status(200).json({totalSavedGames, allSavedGames});
 };
 
 /* 
