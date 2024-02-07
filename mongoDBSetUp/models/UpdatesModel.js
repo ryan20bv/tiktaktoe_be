@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const gamesSchema = new Schema(
+const updatesSchema = new Schema(
 	{
 		player_1: {
 			name: {
@@ -62,4 +62,4 @@ const gamesSchema = new Schema(
 	}
 );
 
-module.exports = mongoose.model('Game', gamesSchema);
+module.exports = mongoose.model('Update', updatesSchema);
