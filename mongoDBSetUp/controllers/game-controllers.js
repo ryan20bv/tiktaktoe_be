@@ -279,8 +279,40 @@ const deleteGameById = async (req, res, next) => {
 	res.status(201).json({message: 'Delete Game'});
 };
 
+// pagination
+/* 
+	* @desc        		POST get saved games 10 per view
+	! @serverRoute    POST "/api/tiktaktoe/game"
+  	!	@additionalRoute "/pagination"
+	? @access      		private need password to delete
+*/
+
+const getSavedGamesLimitToTen = async (req, res, next) => {
+	const {page} = req.body;
+
+	const pageSize = 10;
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return next(new HttpError('Please include page', 422));
+	}
+
+	let savedGames;
+	let totalSavedGames;
+	try {
+		totalSavedGames = await GamesModel.countDocuments();
+		savedGames = await GamesModel.find()
+			.skip((page - 1) * pageSize)
+			.limit(pageSize);
+	} catch (err) {
+		const error = new HttpError('Cant create new Game, please try again', 422);
+		return next(error);
+	}
+	res.status(200).json({totalSavedGames, savedGames});
+};
+
 exports.accessGame = accessGame;
 exports.startNewGame = startNewGame;
 exports.allSavedGames = allSavedGames;
 exports.getGameByGameId = getGameByGameId;
 exports.deleteGameById = deleteGameById;
+exports.getSavedGamesLimitToTen = getSavedGamesLimitToTen;

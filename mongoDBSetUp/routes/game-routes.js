@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const GameRouter = express.Router();
-const gameController = require("../controllers/game-controllers");
-const { check } = require("express-validator");
+const gameController = require('../controllers/game-controllers');
+const {check} = require('express-validator');
 
 /* 
 	* @desc        		POST game access by password
@@ -11,8 +11,8 @@ const { check } = require("express-validator");
 */
 
 GameRouter.post(
-	"/access",
-	[check("game_id").not().isEmpty(), check("password").isLength({ min: 4 })],
+	'/access',
+	[check('game_id').not().isEmpty(), check('password').isLength({min: 4})],
 	gameController.accessGame
 );
 
@@ -23,11 +23,11 @@ GameRouter.post(
 	? @access      		public
 */
 GameRouter.post(
-	"/new",
+	'/new',
 	[
-		check("player1_Name").not().isEmpty(),
-		check("player2_Name").not().isEmpty(),
-		check("password").isLength({ min: 4 }),
+		check('player1_Name').not().isEmpty(),
+		check('player2_Name').not().isEmpty(),
+		check('password').isLength({min: 4})
 	],
 	gameController.startNewGame
 );
@@ -39,7 +39,7 @@ GameRouter.post(
 	? @access      		public
 */
 
-GameRouter.get("/allGames", gameController.allSavedGames);
+GameRouter.get('/allGames', gameController.allSavedGames);
 
 /* 
 	* @desc        		GET get saved game by game id
@@ -47,7 +47,7 @@ GameRouter.get("/allGames", gameController.allSavedGames);
   	!	@additionalRoute "/:game_Id"
 	? @access      		public
 */
-GameRouter.get("/:game_Id", gameController.getGameByGameId);
+GameRouter.get('/:game_Id', gameController.getGameByGameId);
 
 /* 
 	* @desc        		DELETE  saved game by game id
@@ -57,9 +57,23 @@ GameRouter.get("/:game_Id", gameController.getGameByGameId);
 */
 
 GameRouter.delete(
-	"/:game_id",
-	[check("password").isLength({ min: 4 })],
+	'/:game_id',
+	[check('password').isLength({min: 4})],
 	gameController.deleteGameById
+);
+
+// pagination
+/* 
+	* @desc        		POST get saved games 10 per view
+	! @serverRoute    POST "/api/tiktaktoe/game"
+  	!	@additionalRoute "/pagination"
+	? @access      		private need password to delete
+*/
+
+GameRouter.post(
+	'/pagination',
+	[check('page').notEmpty()],
+	gameController.getSavedGamesLimitToTen
 );
 
 module.exports = GameRouter;
