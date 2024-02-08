@@ -289,6 +289,7 @@ const deleteGameById = async (req, res, next) => {
 
 const getSavedGamesLimitToTen = async (req, res, next) => {
 	const {page} = req.body;
+
 	const pageSize = 10;
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -306,7 +307,7 @@ const getSavedGamesLimitToTen = async (req, res, next) => {
 		const error = new HttpError('Cant create new Game, please try again', 422);
 		return next(error);
 	}
-	res.status(201).json({totalSavedGames, savedGames});
+	res.status(200).json({totalSavedGames, savedGames});
 };
 
 exports.accessGame = accessGame;
