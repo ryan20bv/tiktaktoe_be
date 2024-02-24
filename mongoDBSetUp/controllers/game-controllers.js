@@ -298,11 +298,15 @@ const getSavedGamesLimitToTen = async (req, res, next) => {
 
 	let savedGames;
 	let totalSavedGames;
+	const sortQuery = {createdAt: -1};
 	try {
 		totalSavedGames = await GamesModel.countDocuments();
 		savedGames = await GamesModel.find()
 			.skip((page - 1) * pageSize)
-			.limit(pageSize);
+			.limit(pageSize)
+			.sort(sortQuery)
+			.select('-password -updatedAt')
+			.populate({path: 'history'});
 	} catch (err) {
 		const error = new HttpError('Cant create new Game, please try again', 422);
 		return next(error);
