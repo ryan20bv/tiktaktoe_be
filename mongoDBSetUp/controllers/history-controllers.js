@@ -1,7 +1,7 @@
 const {validationResult} = require('express-validator');
 const HttpError = require('../errorHandler/http-error');
 const HistoriesModel = require('../models/HistoriesModel');
-const GamesModel = require('../models/GamesModel').default;
+const GamesModel = require('../models/GamesModel');
 const mongoose = require('mongoose');
 
 /* 
@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 const updateGameHistory = async (req, res, next) => {
 	const {updatedGame} = req.body;
 	const game_Id = req.params.game_Id;
-	// console.log(req.gameData);
+	// console.log(game_Id);
 	// console.log(updatedGame);
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
