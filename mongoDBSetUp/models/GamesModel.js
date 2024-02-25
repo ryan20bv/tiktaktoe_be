@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -7,54 +7,54 @@ const gamesSchema = new Schema(
 		player1: {
 			name: {
 				type: String,
-				required: true,
+				required: true
 			},
 			win: {
 				type: Number,
-				default: 0,
-			},
+				default: 0
+			}
 		},
 		player2: {
 			name: {
 				type: String,
-				required: true,
+				required: true
 			},
 			win: {
 				type: Number,
-				default: 0,
-			},
+				default: 0
+			}
 		},
 		draw: {
 			type: Number,
-			default: 0,
+			default: 0
 		},
 		playerTurn: {
 			type: String,
-			default: 1,
+			default: 1
 		},
 		password: {
 			type: String,
-			required: true,
+			required: true
 		},
 
 		gameIsDone: {
 			type: Boolean,
-			default: false,
+			default: false
 		},
 		gameMessage: {
 			type: String,
-			default: "",
+			default: ''
 		},
 		history: {
 			type: Schema.Types.ObjectId,
-			ref: "History",
+			ref: 'History'
 		},
 		__v: {
 			type: Number,
-			select: false, // Exclude __v from query results
-		},
+			select: false // Exclude __v from query results
+		}
 	},
-	{ timestamps: true }
+	{timestamps: true}
 );
 
-module.exports = mongoose.model("Game", gamesSchema);
+module.exports = mongoose.model('Game', gamesSchema);
